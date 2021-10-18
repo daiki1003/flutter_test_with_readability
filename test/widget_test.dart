@@ -1,79 +1,107 @@
 import 'package:flutter_test/flutter_test.dart';
 
-import 'package:readable_test/main.dart';
+import 'widget_test_helper.dart';
 
 void main() {
   group('[Increment Button]', () {
     group('label shows "0"', () {
-      testWidgets('label shows "1"', (WidgetTester tester) async {
-        await tester.pumpWidget(const MyApp());
+      testWidgets(
+        'label shows "1"',
+        harness((given, when, then) async {
+          {
+            await given.pumpMyApp();
+            given.canFindZero();
+            given.cannotFindOne();
+          }
 
-        expect(find.text('0'), findsOneWidget);
-        expect(find.text('1'), findsNothing);
+          {
+            await when.userTapsIncrementButton();
+          }
 
-        await tester.tap(find.byKey(incrementKey));
-        await tester.pump();
-
-        expect(find.text('0'), findsNothing);
-        expect(find.text('1'), findsOneWidget);
-      });
+          {
+            then.cannotFindZero();
+            then.canFindOne();
+          }
+        }),
+      );
     });
 
     group('label shows "1"', () {
-      testWidgets('label shows "2"', (WidgetTester tester) async {
-        await tester.pumpWidget(const MyApp());
+      testWidgets(
+        'label shows "2"',
+        harness((given, when, then) async {
+          {
+            await given.pumpMyApp();
+            await given.increment();
+            await given.pump();
 
-        await tester.tap(find.byKey(incrementKey));
-        await tester.pump();
+            given.canFindOne();
+            given.cannotFindTwo();
+          }
 
-        expect(find.text('1'), findsOneWidget);
-        expect(find.text('2'), findsNothing);
+          {
+            await when.userTapsIncrementButton();
+          }
 
-        await tester.tap(find.byKey(incrementKey));
-        await tester.pump();
-
-        expect(find.text('1'), findsNothing);
-        expect(find.text('2'), findsOneWidget);
-      });
+          {
+            then.cannotFindOne();
+            then.canFindTwo();
+          }
+        }),
+      );
     });
   });
 
   group('[Decrement Button]', () {
     group('label shows "1"', () {
-      testWidgets('label shows "0"', (WidgetTester tester) async {
-        await tester.pumpWidget(const MyApp());
+      testWidgets(
+        'label shows "0"',
+        harness((given, when, then) async {
+          {
+            await given.pumpMyApp();
+            await given.increment();
+            await given.pump();
 
-        await tester.tap(find.byKey(incrementKey));
-        await tester.pump();
+            given.canFindOne();
+            given.cannotFindZero();
+          }
 
-        expect(find.text('1'), findsOneWidget);
-        expect(find.text('0'), findsNothing);
+          {
+            await when.userTapsDecrementButton();
+          }
 
-        await tester.tap(find.byKey(decrementKey));
-        await tester.pump();
-
-        expect(find.text('0'), findsOneWidget);
-        expect(find.text('1'), findsNothing);
-      });
+          {
+            then.cannotFindOne();
+            then.canFindZero();
+          }
+        }),
+      );
     });
 
     group('label shows "2"', () {
-      testWidgets('label shows "1"', (WidgetTester tester) async {
-        await tester.pumpWidget(const MyApp());
+      testWidgets(
+        'label shows "1"',
+        harness((given, when, then) async {
+          {
+            await given.pumpMyApp();
+            await given.increment();
+            await given.increment();
+            await given.pump();
 
-        await tester.tap(find.byKey(incrementKey));
-        await tester.tap(find.byKey(incrementKey));
-        await tester.pump();
+            given.canFindTwo();
+            given.cannotFindOne();
+          }
 
-        expect(find.text('2'), findsOneWidget);
-        expect(find.text('1'), findsNothing);
+          {
+            await when.userTapsDecrementButton();
+          }
 
-        await tester.tap(find.byKey(decrementKey));
-        await tester.pump();
-
-        expect(find.text('2'), findsNothing);
-        expect(find.text('1'), findsOneWidget);
-      });
+          {
+            then.cannotFindTwo();
+            then.canFindOne();
+          }
+        }),
+      );
     });
   });
 }
