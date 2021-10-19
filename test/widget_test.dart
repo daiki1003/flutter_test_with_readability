@@ -1,15 +1,20 @@
 import 'package:flutter_test/flutter_test.dart';
+import 'package:flutter_test_ui/flutter_test_ui.dart';
+import 'package:readable_test/main.dart';
 
 import 'widget_test_helper.dart';
 
 void main() {
+  setUpUI((tester) async {
+    await tester.pumpWidget(const MyApp());
+  });
+
   group('[Increment Button]', () {
     group('label shows "0"', () {
-      testWidgets(
+      testUI(
         'label shows "1"',
         harness((given, when, then) async {
           {
-            await given.pumpMyApp();
             given.canFindZero();
             given.cannotFindOne();
           }
@@ -27,14 +32,15 @@ void main() {
     });
 
     group('label shows "1"', () {
-      testWidgets(
+      setUpUI((tester) async {
+        await tester.tap(find.byKey(incrementKey));
+        await tester.pump();
+      });
+
+      testUI(
         'label shows "2"',
         harness((given, when, then) async {
           {
-            await given.pumpMyApp();
-            await given.increment();
-            await given.pump();
-
             given.canFindOne();
             given.cannotFindTwo();
           }
@@ -54,14 +60,15 @@ void main() {
 
   group('[Decrement Button]', () {
     group('label shows "1"', () {
-      testWidgets(
+      setUpUI((tester) async {
+        await tester.tap(find.byKey(incrementKey));
+        await tester.pump();
+      });
+
+      testUI(
         'label shows "0"',
         harness((given, when, then) async {
           {
-            await given.pumpMyApp();
-            await given.increment();
-            await given.pump();
-
             given.canFindOne();
             given.cannotFindZero();
           }
@@ -79,15 +86,16 @@ void main() {
     });
 
     group('label shows "2"', () {
-      testWidgets(
+      setUpUI((tester) async {
+        await tester.tap(find.byKey(incrementKey));
+        await tester.tap(find.byKey(incrementKey));
+        await tester.pump();
+      });
+
+      testUI(
         'label shows "1"',
         harness((given, when, then) async {
           {
-            await given.pumpMyApp();
-            await given.increment();
-            await given.increment();
-            await given.pump();
-
             given.canFindTwo();
             given.cannotFindOne();
           }

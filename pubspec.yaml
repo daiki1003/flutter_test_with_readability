@@ -36,6 +36,7 @@ dependencies:
   cupertino_icons: ^1.0.2
   dart_dot_reporter: ^1.0.4
   given_when_then: ^0.2.0
+  flutter_test_ui: ^2.0.0
 
 dev_dependencies:
   flutter_test:
